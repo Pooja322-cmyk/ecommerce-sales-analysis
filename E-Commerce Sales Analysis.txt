@@ -1,69 +1,111 @@
--- E-Commerce Sales Analysis
--- SQL Server Project
-
--- 1. Total Customers
 SELECT COUNT(*) AS Total_Customers
 FROM dbo.customer;
 
--- 2. Total Orders
 SELECT COUNT(DISTINCT Order_ID) AS Total_Orders
-FROM dbo.order_details;
+FROM dbo.orders_details;
 
--- 3. Total Products
 SELECT COUNT(*) AS Total_Products
 FROM dbo.product_details;
 
--- 4. Total Returns
 SELECT COUNT(*) AS Total_Returns
 FROM dbo.return_details;
 
--- 5. Sales by Shipping City
+SELECT TOP 5 *
+FROM dbo.orders_details;
+
+SELECT TOP 5 *
+FROM dbo.payment_details;
+
 SELECT 
-    Shipping_City,
-    SUM(Total_Sales) AS Total_Sales
-FROM dbo.order_details
-GROUP BY Shipping_City
+    o.shipping_city,
+    SUM(p.amount) AS Total_Sales
+FROM dbo.orders_details o
+INNER JOIN dbo.payment_details p
+    ON o.order_id = p.order_id
+GROUP BY o.shipping_city
 ORDER BY Total_Sales DESC;
 
--- 6. Sales by Category
-SELECT 
-    p.Category,
-    SUM(oi.Unit_Price * oi.Quantity) AS Total_Sales
-FROM dbo.order_items oi
-JOIN dbo.product_details p
-    ON oi.Product_ID = p.Product_ID
-GROUP BY p.Category
+
+
+SELECT TOP 5 *
+FROM dbo.product_details;
+
+
+SELECT TOP 5 *
+FROM dbo.order_item_details;
+
+SELECT TOP 5 *
+FROM dbo.product_details;
+
+
+SELECT COLUMN_NAME
+FROM INFORMATION_SCHEMA.COLUMNS
+WHERE TABLE_NAME = 'product_details';
+
+
+SELECT COLUMN_NAME
+FROM INFORMATION_SCHEMA.COLUMNS
+WHERE TABLE_NAME = 'product_details';
+
+SELECT COLUMN_NAME
+FROM INFORMATION_SCHEMA.COLUMNS
+WHERE TABLE_NAME = 'product_details';
+
+
+
+SELECT COLUMN_NAME
+FROM INFORMATION_SCHEMA.COLUMNS
+WHERE TABLE_NAME = 'order_item_details';
+
+
+
+SELECT
+    p.category,
+    SUM(oi.quantity * oi.unit_price * (1 - oi.discount_percent / 100.0)) AS Total_Sales
+FROM dbo.order_item_details oi
+INNER JOIN dbo.product_details p
+    ON oi.product_id = p.product_id
+GROUP BY p.category
 ORDER BY Total_Sales DESC;
 
--- 7. Orders by Status
-SELECT 
-    Order_Status,
-    COUNT(DISTINCT Order_ID) AS Total_Orders
-FROM dbo.order_details
-GROUP BY Order_Status;
 
--- 8. Sales by Payment Method
-SELECT 
-    Payment_Method,
-    SUM(Payment_Value) AS Total_Sales
+SELECT
+    status,
+    COUNT(DISTINCT order_id) AS Total_Orders
+FROM dbo.orders_details
+GROUP BY status
+ORDER BY Total_Orders DESC;
+
+
+SELECT
+    payment_method,
+    SUM(amount) AS Total_Sales
 FROM dbo.payment_details
-GROUP BY Payment_Method
+GROUP BY payment_method
 ORDER BY Total_Sales DESC;
 
--- 9. Quantity by Category
-SELECT 
-    p.Category,
-    SUM(oi.Quantity) AS Total_Quantity
-FROM dbo.order_items oi
-JOIN dbo.product_details p
-    ON oi.Product_ID = p.Product_ID
-GROUP BY p.Category
+SELECT
+    p.category,
+    SUM(oi.quantity) AS Total_Quantity
+FROM dbo.order_item_details oi
+INNER JOIN dbo.product_details p
+    ON oi.product_id = p.product_id
+GROUP BY p.category
 ORDER BY Total_Quantity DESC;
 
--- 10. Returns by Reason
-SELECT 
-    Return_Reason,
+
+SELECT COLUMN_NAME
+FROM INFORMATION_SCHEMA.COLUMNS
+WHERE TABLE_NAME = 'return_details';
+
+SELECT COLUMN_NAME
+FROM INFORMATION_SCHEMA.COLUMNS
+WHERE TABLE_NAME = 'return_details';
+
+
+SELECT
+    reason,
     COUNT(*) AS Total_Returns
 FROM dbo.return_details
-GROUP BY Return_Reason
+GROUP BY reason
 ORDER BY Total_Returns DESC;
