@@ -1,0 +1,69 @@
+-- E-Commerce Sales Analysis
+-- SQL Server Project
+
+-- 1. Total Customers
+SELECT COUNT(*) AS Total_Customers
+FROM dbo.customer;
+
+-- 2. Total Orders
+SELECT COUNT(DISTINCT Order_ID) AS Total_Orders
+FROM dbo.order_details;
+
+-- 3. Total Products
+SELECT COUNT(*) AS Total_Products
+FROM dbo.product_details;
+
+-- 4. Total Returns
+SELECT COUNT(*) AS Total_Returns
+FROM dbo.return_details;
+
+-- 5. Sales by Shipping City
+SELECT 
+    Shipping_City,
+    SUM(Total_Sales) AS Total_Sales
+FROM dbo.order_details
+GROUP BY Shipping_City
+ORDER BY Total_Sales DESC;
+
+-- 6. Sales by Category
+SELECT 
+    p.Category,
+    SUM(oi.Unit_Price * oi.Quantity) AS Total_Sales
+FROM dbo.order_items oi
+JOIN dbo.product_details p
+    ON oi.Product_ID = p.Product_ID
+GROUP BY p.Category
+ORDER BY Total_Sales DESC;
+
+-- 7. Orders by Status
+SELECT 
+    Order_Status,
+    COUNT(DISTINCT Order_ID) AS Total_Orders
+FROM dbo.order_details
+GROUP BY Order_Status;
+
+-- 8. Sales by Payment Method
+SELECT 
+    Payment_Method,
+    SUM(Payment_Value) AS Total_Sales
+FROM dbo.payment_details
+GROUP BY Payment_Method
+ORDER BY Total_Sales DESC;
+
+-- 9. Quantity by Category
+SELECT 
+    p.Category,
+    SUM(oi.Quantity) AS Total_Quantity
+FROM dbo.order_items oi
+JOIN dbo.product_details p
+    ON oi.Product_ID = p.Product_ID
+GROUP BY p.Category
+ORDER BY Total_Quantity DESC;
+
+-- 10. Returns by Reason
+SELECT 
+    Return_Reason,
+    COUNT(*) AS Total_Returns
+FROM dbo.return_details
+GROUP BY Return_Reason
+ORDER BY Total_Returns DESC;
