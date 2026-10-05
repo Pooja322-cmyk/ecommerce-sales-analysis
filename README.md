@@ -22,8 +22,9 @@ This project analyzes e-commerce sales data to understand sales performance, cus
 - Quantity by Category
 - Returns by Reason
 
-## Dashboard
-The Power BI dashboard provides an interactive view of e-commerce sales and performance.
+## Power BI Dashboard
+
+![E-Commerce Sales Dashboard](ecommerce-dashboard.png)
 
 ## Skills Demonstrated
 - SQL querying
